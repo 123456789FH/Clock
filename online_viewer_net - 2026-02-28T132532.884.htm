@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0ea5e9" />
+  <title>وقتي في رمضان — تدريب قراءة الساعة</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --brand:#0ea5e9;   /* أزرق */
+      --brand2:#22c55e;  /* أخضر */
+      --ink:#0f172a;
+      --muted:#64748b;
+      --bg:#f6f8fc;
+      --card:#ffffff;
+      --shadow: 0 14px 36px rgba(2,8,23,.10);
+      --radius:18px;
+    }
+    *{ box-sizing:border-box; font-family:"Tajawal",system-ui,-apple-system,Segoe UI,Arial; }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1000px 650px at 18% 10%, rgba(14,165,233,.18), transparent 60%),
+        radial-gradient(1000px 650px at 82% 18%, rgba(34,197,94,.15), transparent 58%),
+        linear-gradient(180deg, #ffffff, var(--bg));
+      color:var(--ink);
+    }
+    .wrap{ max-width:1120px; margin:22px auto; padding:0 16px 96px; }
+
+    /* Header */
+    .top{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:16px 16px; border-radius:var(--radius);
+      background:linear-gradient(135deg, rgba(14,165,233,.14), rgba(34,197,94,.12));
+      border:1px solid rgba(2,8,23,.06);
+      box-shadow: 0 10px 26px rgba(2,8,23,.06);
+    }
+    .title{ display:flex; gap:12px; align-items:center; }
+    .logo{
+      width:60px; height:60px; border-radius:18px;
+      object-fit:contain;
+      background:#fff;
+      border:1px solid rgba(2,8,23,.08);
+      box-shadow: var(--shadow);
+      padding:7px;
+      flex:0 0 auto;
+    }
+    h1{ font-size:20px; margin:0 0 4px; font-weight:900; }
+    .sub{ margin:0; color:var(--muted); font-size:14px; line-height:1.7; }
+
+    .row{ display:grid; grid-template-columns: 1.05fr .95fr; gap:16px; margin-top:16px; }
+    @media (max-width: 950px){ .row{ grid-template-columns:1fr; } }
+
+    .card{
+      background:var(--card); border-radius:var(--radius);
+      border:1px solid rgba(2,8,23,.06); box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .pill{
+      display:inline-flex; gap:8px; align-items:center;
+      background:rgba(2,8,23,.04); border:1px solid rgba(2,8,23,.06);
+      padding:8px 10px; border-radius:999px; font-size:13px; color:var(--muted);
+      white-space:nowrap;
+    }
+
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width: 520px){ .grid2{ grid-template-columns:1fr; } }
+
+    .select, .input{
+      width:100%; padding:10px 12px; border-radius:14px;
+      border:1px solid rgba(2,8,23,.14);
+      outline:none; background:#fff; font-weight:700;
+    }
+    .label{ font-weight:900; font-size:13px; margin:0 0 6px; color:rgba(2,8,23,.75); }
+
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; }
+    .tab{
+      border:1px solid rgba(2,8,23,.10);
+      background:#fff; color:var(--ink);
+      padding:10px 12px; border-radius:999px;
+      cursor:pointer; font-weight:800; font-size:14px;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .tab:hover{ transform: translateY(-1px); }
+    .tab.active{
+      background:linear-gradient(135deg, rgba(14,165,233,.14), rgba(34,197,94,.12));
+      border-color: rgba(14,165,233,.35);
+    }
+
+    .muted{ color:var(--muted); font-size:13px; line-height:1.8; }
+
+    .btn{
+      border:none; cursor:pointer; border-radius:14px; padding:10px 12px;
+      font-weight:900; background:linear-gradient(135deg, var(--brand), var(--brand2));
+      color:white; box-shadow: 0 12px 20px rgba(14,165,233,.16);
+      transition: transform .12s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.ghost{
+      background:#fff; color:var(--ink);
+      border:1px solid rgba(2,8,23,.12); box-shadow:none;
+    }
+    .btn.small{ padding:8px 10px; border-radius:12px; font-weight:900; }
+    .btn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+
+    .hr{ height:1px; background:rgba(2,8,23,.06); margin:14px 0; }
+
+    .box{
+      background: rgba(2,8,23,.03);
+      border: 1px dashed rgba(2,8,23,.18);
+      padding:12px; border-radius:16px;
+    }
+
+    /* Clock */
+    .clock-wrap{ display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .clock{
+      width:320px; height:320px; border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.95), rgba(255,255,255,.55)),
+        linear-gradient(180deg, #ffffff, #f7fbff);
+      border: 10px solid rgba(14,165,233,.18);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    @media (max-width: 520px){ .clock{ width:290px; height:290px; } }
+    .ticks{
+      position:absolute; inset:0;
+      background:
+        repeating-conic-gradient(
+          from -90deg,
+          rgba(2,8,23,.20) 0deg 1deg,
+          transparent 1deg 6deg
+        );
+      mask: radial-gradient(circle at center, transparent 0 74%, black 74% 100%);
+      opacity:.33;
+    }
+    .numbers{ position:absolute; inset:0; }
+    .num{
+      position:absolute;
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      font-weight:900; color:rgba(2,8,23,.72);
+      transform: translate(-50%,-50%);
+      user-select:none;
+    }
+    .hand{
+      position:absolute;
+      left:50%; top:50%;
+      transform-origin: 50% 100%;
+      border-radius:999px;
+      box-shadow: 0 6px 12px rgba(2,8,23,.12);
+    }
+    .hand.hour{
+      width:10px; height:95px;
+      background: linear-gradient(180deg, rgba(15,23,42,.95), rgba(15,23,42,.65));
+    }
+    .hand.minute{
+      width:8px; height:130px;
+      background: linear-gradient(180deg, rgba(14,165,233,.95), rgba(34,197,94,.75));
+    }
+    .center-dot{
+      position:absolute; left:50%; top:50%;
+      width:16px; height:16px; border-radius:50%;
+      transform: translate(-50%,-50%);
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border:3px solid white;
+      box-shadow: 0 10px 18px rgba(14,165,233,.18);
+      z-index:4;
+    }
+
+    .controls{ flex:1; min-width:260px; display:grid; gap:10px; }
+    .kpi{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between; }
+    .digital{
+      font-size:28px; font-weight:900; letter-spacing: .5px;
+      background: rgba(2,8,23,.04);
+      border:1px solid rgba(2,8,23,.06);
+      padding:10px 12px; border-radius:16px;
+      display:inline-block;
+    }
+    .feedback{
+      padding:10px 12px; border-radius:16px;
+      border:1px solid rgba(2,8,23,.08);
+      background:rgba(255,255,255,.7);
+      min-height:44px;
+      line-height:1.9;
+      font-weight:700;
+    }
+    .ok{ border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.10); }
+    .bad{ border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.08); }
+
+    /* Plan table */
+    table{ width:100%; border-collapse:separate; border-spacing:0 10px; }
+    th{ text-align:right; color:rgba(2,8,23,.70); font-size:13px; }
+    td{ background:#fff; border:1px solid rgba(2,8,23,.08); padding:10px; border-radius:14px; }
+    .mini{ font-size:12px; color:var(--muted); }
+
+    footer{
+      position:fixed; left:0; right:0; bottom:0;
+      background: rgba(255,255,255,.88);
+      border-top: 1px solid rgba(2,8,23,.08);
+      backdrop-filter: blur(10px);
+      padding:10px 14px;
+      display:flex; gap:10px; justify-content:space-between; align-items:center; flex-wrap:wrap;
+      font-size:13px; color:rgba(2,8,23,.70);
+      z-index: 10;
+    }
+    footer b{ color:rgba(2,8,23,.88); }
+
+    /* Certificate modal */
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(2,8,23,.55);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:18px;
+      z-index: 9999;
+    }
+    .modal.show{ display:flex; }
+    .cert{
+      width:min(920px, 100%);
+      background:
+        radial-gradient(900px 600px at 15% 15%, rgba(14,165,233,.18), transparent 65%),
+        radial-gradient(900px 600px at 85% 20%, rgba(34,197,94,.16), transparent 60%),
+        linear-gradient(180deg, #ffffff, #f8fbff);
+      border-radius: 26px;
+      border: 1px solid rgba(2,8,23,.08);
+      box-shadow: 0 22px 60px rgba(2,8,23,.18);
+      overflow:hidden;
+    }
+    .cert-head{
+      padding:18px 20px;
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      border-bottom:1px solid rgba(2,8,23,.06);
+      background: rgba(255,255,255,.75);
+      backdrop-filter: blur(10px);
+    }
+    .cert-brand{ display:flex; gap:12px; align-items:center; }
+    .cert-brand img{
+      width:54px; height:54px; border-radius:16px; object-fit:contain;
+      background:#fff; padding:6px; border:1px solid rgba(2,8,23,.08);
+    }
+    .cert-body{ padding:24px 22px 18px; }
+    .cert-title{ font-size:34px; font-weight:900; margin:0 0 8px; }
+    .cert-sub{ margin:0 0 18px; color:rgba(2,8,23,.65); font-weight:800; line-height:1.9; }
+    .cert-name{
+      margin:18px 0 10px; font-size:28px; font-weight:900;
+      padding:14px 16px; border-radius:18px;
+      background: rgba(2,8,23,.03);
+      border:1px dashed rgba(2,8,23,.18);
+    }
+    .cert-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+    @media (max-width:700px){ .cert-grid{ grid-template-columns:1fr; } }
+    .cert-kpi{
+      padding:12px 14px; border-radius:18px;
+      border:1px solid rgba(2,8,23,.08);
+      background:#fff;
+      display:flex; justify-content:space-between; gap:10px; align-items:center;
+      font-weight:900;
+    }
+    .cert-foot{
+      padding:14px 18px 18px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      border-top:1px solid rgba(2,8,23,.06);
+      background: rgba(255,255,255,.75);
+    }
+    .cert-sign{ color:rgba(2,8,23,.72); font-weight:900; }
+
+    /* Print */
+    @media print{
+      .wrap, footer{ display:none !important; }
+      body{ background:#fff; }
+      .modal{ position:static; inset:auto; display:block !important; background:#fff !important; padding:0 !important; }
+      .cert{ box-shadow:none !important; border:1px solid #ddd !important; }
+      .cert-head{ border-bottom:1px solid #ddd !important; }
+      .cert-foot{ border-top:1px solid #ddd !important; }
+      #closeCert{ display:none !important; }
+      #copyResult{ display:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="title">
+        <img class="logo" id="logoImg" alt="شعار ملتقى التعليم التفاعلي" />
+        <div>
+          <h1>وقتي في رمضان — تدريب قراءة الساعة + إدارة الوقت</h1>
+          <p class="sub">برنامج صغير لطلاب الصف الثالث: نقرأ الساعة ونربطها بعبادات رمضان وأعمال اليوم. ✨</p>
+        </div>
+      </div>
+
+      <div style="min-width:260px; display:grid; gap:10px;">
+        <div class="pill">🕒 <span>“والعصر” تذكير بأن الوقت ثمين</span></div>
+        <div class="grid2">
+          <div>
+            <div class="label">اسم الطالب (اختياري)</div>
+            <input id="studentName" class="input" placeholder="اكتب الاسم هنا…" />
+          </div>
+          <div>
+            <div class="label">دقة التدريب</div>
+            <select id="difficulty" class="select">
+              <option value="hour">على رأس الساعة</option>
+              <option value="half">نصف ساعة</option>
+              <option value="quarter" selected>أرباع الساعة</option>
+              <option value="five">كل ٥ دقائق</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Left -->
+      <div class="card">
+        <div class="tabs">
+          <button class="tab active" data-tab="game">🎯 تدريب الساعة</button>
+          <button class="tab" data-tab="plan">📅 جدولي الرمضاني</button>
+          <button class="tab" data-tab="teacher">🧑‍🏫 فكرة تربوية</button>
+        </div>
+
+        <!-- Game -->
+        <div id="tab-game" class="tab-panel" style="margin-top:14px;">
+          <div class="muted">
+            اضبط العقارب على الوقت المطلوب. كل إجابة صحيحة تكسبك نقطة.
+            <b>تنبيه:</b> الأوقات هنا أمثلة للتعلم وليست مواقيت رسمية للصلاة.
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="kpi">
+            <div class="pill">📌 السؤال: <b id="qNow">٠</b>/<b id="qTotal">١٠</b></div>
+            <div class="pill">⭐ الدرجة: <b id="score">٠</b></div>
+            <div class="pill">🏆 أفضل نتيجة: <b id="best">٠</b></div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="box">
+            <div class="label">المهمة</div>
+            <div style="font-size:16px; font-weight:900; line-height:1.8;" id="prompt">اضغط “ابدأ” لبدء التدريب.</div>
+            <div class="mini" id="hint" style="margin-top:6px;">تلميح: العقرب الطويل للدقائق، والقصير للساعات.</div>
+
+            <div class="hr"></div>
+
+            <div class="clock-wrap">
+              <div class="clock" id="clock">
+                <div class="ticks"></div>
+                <div class="numbers" id="clockNumbers"></div>
+                <div class="hand hour" id="hourHand"></div>
+                <div class="hand minute" id="minuteHand"></div>
+                <div class="center-dot"></div>
+              </div>
+
+              <div class="controls">
+                <div>
+                  <div class="label">الوقت الذي اخترته</div>
+                  <div class="digital" id="digitalPreview">٠٠:٠٠</div>
+                </div>
+
+                <div class="grid2">
+                  <button class="btn small ghost" id="hourDown">− ساعة</button>
+                  <button class="btn small ghost" id="hourUp">+ ساعة</button>
+                </div>
+
+                <div class="grid2">
+                  <button class="btn small ghost" id="minDown">− دقائق</button>
+                  <button class="btn small ghost" id="minUp">+ دقائق</button>
+                </div>
+
+                <div class="grid2">
+                  <button class="btn small" id="startBtn">ابدأ</button>
+                  <button class="btn small ghost" id="resetBtn">إعادة ضبط</button>
+                </div>
+
+                <div class="grid2">
+                  <button class="btn small" id="checkBtn" disabled>تحقق</button>
+                  <button class="btn small ghost" id="nextBtn" disabled>التالي</button>
+                </div>
+
+                <div class="grid2">
+                  <button class="btn small ghost" id="certBtn" style="display:none;">🏅 شهادة إنجاز</button>
+                  <button class="btn small ghost" id="copyResult" style="display:none;">نسخ النتيجة</button>
+                </div>
+
+                <div class="feedback" id="feedback">جاهز؟ اضغط “ابدأ”.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan -->
+        <div id="tab-plan" class="tab-panel" style="display:none; margin-top:14px;">
+          <div class="muted">
+            اكتب جدولك الرمضاني (أوقات تقريبية) ثم احفظه أو اطبعه.
+            هذا يساعدك تربط <b>إدارة الوقت</b> بـ <b>الالتزام بالعبادات</b>.
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="box">
+            <div class="label">ملاحظة مهمة</div>
+            <div class="muted">عدّل الأوقات حسب مدينتك ومدرستك. الهدف هنا: تدريب على قراءة الساعة وتنظيم اليوم.</div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="box">
+            <div class="label">جدولي الرمضاني</div>
+            <div class="mini" style="margin-bottom:10px;">اختر ساعة/دقيقة لكل نشاط ثم “حفظ الجدول”.</div>
+
+            <div style="overflow:auto;">
+              <table id="planTable">
+                <thead>
+                  <tr>
+                    <th style="width:40%;">النشاط</th>
+                    <th>الساعة</th>
+                    <th>الدقيقة</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <div class="grid2">
+              <button class="btn" id="savePlan">حفظ الجدول</button>
+              <button class="btn ghost" id="printPlan">طباعة</button>
+            </div>
+
+            <div class="hr"></div>
+
+            <div class="box">
+              <div class="label">قاعدة ذهبية لإدارة الوقت</div>
+              <div class="muted">
+                ١) أبدأ بالفرائض. ٢) أحدد وقتًا للقرآن. ٣) أضع وقتًا للمذاكرة والراحة. ٤) أترك وقتًا للبر وصلة الرحم.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher -->
+        <div id="tab-teacher" class="tab-panel" style="display:none; margin-top:14px;">
+          <div class="box">
+            <div class="label">فكرة تربوية مختصرة تربط المهارة بالقيمة</div>
+            <div class="muted">
+              • اسأل: “كيف أعرف أني وصلت في الوقت؟” ثم اربطها: الصلاة والإفطار لا ينتظران… إذن أنت من ينظّم يومه.<br>
+              • اجعل الطالب يقول: “سأضع وقتًا لعبادتي، ثم وقتًا لواجبي، ثم وقتًا لراحتي”.<br>
+              • استخدم البرنامج كـ (محطة تعلم): يجيب ٥ أسئلة، ثم يملأ جدول يومه الرمضاني.
+            </div>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="box">
+            <div class="label">نص جاهز تقوله للطلاب</div>
+            <div class="muted" style="font-weight:800;">
+              “في رمضان نتعلم قيمة عظيمة: وقتي أمانة. إذا عرفت أقرأ الساعة صح، أقدر أنظّم عبادتي ومذاكرتي وراحتي.
+              اليوم بنلعب لعبة الساعة: كل مهمة رمضانية لها وقت… وأنت تضبط العقارب وتثبت أنك قدّها!”
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="card">
+        <div class="label">لماذا هذا الربط قوي؟</div>
+        <p class="muted">
+          لأن الطالب يشوف الساعة في سياق واقعي: (سحور، فجر، مذاكرة، إفطار…)
+          فيتعلّم أن الوقت ليس أرقامًا فقط، بل <b>سلوك والتزام</b>.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="label">طريقة استخدام سريعة داخل الصف</div>
+        <div class="muted">
+          ١) اعرض أول سؤال على السبورة.<br>
+          ٢) خلي الطلاب يضبطون الوقت في البرنامج (جهاز/لوح/حاسوب).<br>
+          ٣) بعد ٥ أسئلة: انتقل لتبويب “جدولي الرمضاني”.
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="label">ملاحظة تقنية</div>
+        <div class="muted">
+          • يعمل بدون إنترنت بعد فتحه مرة.<br>
+          • يحفظ أفضل نتيجة وجدول الطالب على نفس الجهاز.<br>
+          • الشهادة تُطبع من زر “شهادة إنجاز”.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div>© <b>أ/ فاطمة هزازي</b> — ملتقى معلمي ومعلمات الرياضيات — ملتقى التعليم التفاعلي</div>
+    <div class="mini">برنامج تدريبي مبسط لقراءة الساعة وإدارة الوقت في رمضان</div>
+  </footer>
+
+  <!-- Certificate Modal -->
+  <div class="modal" id="certModal" aria-hidden="true">
+    <div class="cert" role="dialog" aria-modal="true" aria-label="شهادة إنجاز">
+      <div class="cert-head">
+        <div class="cert-brand">
+          <img id="certLogo" alt="شعار" />
+          <div>
+            <div style="font-weight:900; font-size:16px;">شهادة إنجاز</div>
+            <div class="mini">وقتي في رمضان — تدريب قراءة الساعة</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="btn ghost" id="printCert">🖨️ طباعة الشهادة</button>
+          <button class="btn" id="closeCert">إغلاق</button>
+        </div>
+      </div>
+
+      <div class="cert-body">
+        <h2 class="cert-title">شهادة إنجاز</h2>
+        <p class="cert-sub">
+          تشهد هذه الشهادة بإتمام التدريب وتحقيق نتيجة في مهارة قراءة الساعة وإدارة الوقت في رمضان.
+        </p>
+
+        <div class="cert-name">الطالب: <span id="certName">—</span></div>
+
+        <div class="cert-grid">
+          <div class="cert-kpi"><span>النتيجة</span><span id="certScore">—</span></div>
+          <div class="cert-kpi"><span>التاريخ</span><span id="certDate">—</span></div>
+        </div>
+
+        <div class="hr"></div>
+
+        <div class="mini" style="font-weight:900;">
+          المعلمة: أ/ فاطمة هزازي — ملتقى التعليم التفاعلي
+        </div>
+      </div>
+
+      <div class="cert-foot">
+        <div class="cert-sign">ملتقى معلمي ومعلمات الرياضيات</div>
+        <div class="cert-sign">شهادة تشجيعية تعليمية</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  /* ===== شعارك (مدمج داخل الملف) ===== */
+  const LOGO_DATA_URI = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAQDAwQDAwQEAwQFBAQFBgoHBgYGBg0JCggKDw0QEA8NDw4R" +
+  "..." +
+  "==";
+  // ملاحظة: تم اختصار النص هنا في هذا العرض.
+  // إذا نسخت الكود من ChatGPT مباشرة سيحتوي Base64 كامل.
+
+  // تطبيق الشعار في أماكنه
+  const logoImg = document.getElementById("logoImg");
+  const certLogo = document.getElementById("certLogo");
+  logoImg.src = LOGO_DATA_URI;
+  certLogo.src = LOGO_DATA_URI;
+
+  // ===== Helpers: Arabic digits =====
+  const AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+  const toArabicDigits = (s) => String(s).replace(/\d/g, d => AR_DIGITS[d]);
+  const pad2 = (n) => String(n).padStart(2,"0");
+  const clampHour12 = (h) => { let x = h % 12; if (x === 0) x = 12; return x; };
+
+  // ===== Difficulty settings =====
+  const DIFF = {
+    hour:   { step:60, minutes:[0] },
+    half:   { step:30, minutes:[0,30] },
+    quarter:{ step:15, minutes:[0,15,30,45] },
+    five:   { step:5,  minutes:[0,5,10,15,20,25,30,35,40,45,50,55] },
+  };
+
+  // ===== Scenario events (examples for learning) =====
+  const EVENTS = [
+    { label:"السحور", hours:[3,4,5] },
+    { label:"صلاة الفجر (مثال)", hours:[4,5,6] },
+    { label:"أذكار الصباح", hours:[6,7,8] },
+    { label:"مذاكرة قصيرة", hours:[8,9,10] },
+    { label:"صلاة الظهر (مثال)", hours:[12,1] },
+    { label:"قيلولة/راحة", hours:[1,2] },
+    { label:"صلاة العصر (مثال)", hours:[3,4,5] },
+    { label:"قراءة قرآن", hours:[4,5] },
+    { label:"الإفطار (مثال)", hours:[6,7] },
+    { label:"التراويح (مثال)", hours:[8,9] },
+  ];
+
+  // ===== Defaults for plan tab =====
+  const planDefaults = [
+    { id:"suhoor", label:"السحور", hour:4, minute:30 },
+    { id:"fajr",   label:"صلاة الفجر (مثال)", hour:5, minute:0 },
+    { id:"quran",  label:"ورد القرآن", hour:6, minute:15 },
+    { id:"study",  label:"مذاكرة/واجب", hour:9, minute:0 },
+    { id:"dhuhr",  label:"صلاة الظهر (مثال)", hour:12, minute:30 },
+    { id:"nap",    label:"قيلولة/راحة", hour:1, minute:30 },
+    { id:"asr",    label:"صلاة العصر (مثال)", hour:3, minute:30 },
+    { id:"family", label:"بر الوالدين/صلة الرحم", hour:4, minute:30 },
+    { id:"iftar",  label:"الإفطار (مثال)", hour:6, minute:15 },
+    { id:"tara",   label:"التراويح (مثال)", hour:8, minute:0 },
+  ];
+
+  const state = {
+    total: 10,
+    qIndex: 0,
+    score: 0,
+    best: 0,
+    target: null,
+    setting: { hour: 12, minute: 0 },
+    difficulty: "quarter",
+    student: "",
+    plan: [],
+  };
+
+  const el = (id) => document.getElementById(id);
+
+  const tabs = document.querySelectorAll(".tab");
+  const panels = { game: el("tab-game"), plan: el("tab-plan"), teacher: el("tab-teacher") };
+
+  const hourHand = el("hourHand");
+  const minuteHand = el("minuteHand");
+  const digitalPreview = el("digitalPreview");
+  const prompt = el("prompt");
+  const hint = el("hint");
+  const feedback = el("feedback");
+  const qNow = el("qNow");
+  const qTotal = el("qTotal");
+  const scoreEl = el("score");
+  const bestEl = el("best");
+
+  const startBtn = el("startBtn");
+  const resetBtn = el("resetBtn");
+  const checkBtn = el("checkBtn");
+  const nextBtn = el("nextBtn");
+  const hourUp = el("hourUp");
+  const hourDown = el("hourDown");
+  const minUp = el("minUp");
+  const minDown = el("minDown");
+  const difficultySel = el("difficulty");
+  const studentName = el("studentName");
+
+  const certBtn = el("certBtn");
+  const copyResultBtn = el("copyResult");
+  const certModal = el("certModal");
+  const closeCert = el("closeCert");
+  const printCert = el("printCert");
+  const certName = el("certName");
+  const certScore = el("certScore");
+  const certDate = el("certDate");
+
+  function buildNumbers(){
+    const cont = el("clockNumbers");
+    cont.innerHTML = "";
+    const clock = el("clock");
+    const rect = clock.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height);
+    const center = size/2;
+    const r = size * 0.38;
+
+    for(let i=1;i<=12;i++){
+      const div = document.createElement("div");
+      div.className = "num";
+      div.textContent = toArabicDigits(i);
+      const angle = (i * 30 - 90) * Math.PI / 180;
+      const x = center + r * Math.cos(angle);
+      const y = center + r * Math.sin(angle);
+      div.style.left = x + "px";
+      div.style.top  = y + "px";
+      cont.appendChild(div);
+    }
+  }
+
+  function formatTime(h,m){ return toArabicDigits(`${pad2(h)}:${pad2(m)}`); }
+
+  function updateClock(){
+    const h = clampHour12(state.setting.hour);
+    const m = state.setting.minute;
+    const hourAngle = (h % 12) * 30 + (m/60) * 30;
+    const minAngle = m * 6;
+
+    hourHand.style.transform   = `translate(-50%,-100%) rotate(${hourAngle}deg)`;
+    minuteHand.style.transform = `translate(-50%,-100%) rotate(${minAngle}deg)`;
+    digitalPreview.textContent = formatTime(h, m);
+  }
+
+  function setFeedback(msg, kind=""){
+    feedback.classList.remove("ok","bad");
+    if(kind) feedback.classList.add(kind);
+    feedback.textContent = msg;
+  }
+
+  function loadBest(){
+    const k = "ramadan_clock_best";
+    const v = Number(localStorage.getItem(k) || 0);
+    state.best = isFinite(v) ? v : 0;
+    bestEl.textContent = toArabicDigits(state.best);
+  }
+  function saveBest(){
+    localStorage.setItem("ramadan_clock_best", String(state.best));
+    bestEl.textContent = toArabicDigits(state.best);
+  }
+
+  function loadStudent(){
+    const v = localStorage.getItem("ramadan_clock_student") || "";
+    state.student = v;
+    studentName.value = v;
+  }
+  function saveStudent(){ localStorage.setItem("ramadan_clock_student", state.student || ""); }
+
+  function pickQuestion(){
+    const diff = DIFF[state.difficulty];
+    const event = EVENTS[Math.floor(Math.random() * EVENTS.length)];
+    const hour = event.hours[Math.floor(Math.random() * event.hours.length)];
+    const minute = diff.minutes[Math.floor(Math.random() * diff.minutes.length)];
+    state.target = { event: event.label, hour: clampHour12(hour), minute };
+    prompt.innerHTML = `اضبط الساعة على وقت: <b>${state.target.event}</b> — <b>${formatTime(state.target.hour, state.target.minute)}</b>`;
+    hint.textContent = "تلميح: حرّك الدقائق حتى يصل العقرب الطويل للمكان الصحيح.";
+  }
+
+  function resetSetting(){
+    state.setting.hour = 12;
+    state.setting.minute = 0;
+    updateClock();
+  }
+
+  function startGame(){
+    state.qIndex = 0;
+    state.score = 0;
+    scoreEl.textContent = toArabicDigits(state.score);
+    qTotal.textContent = toArabicDigits(state.total);
+
+    certBtn.style.display = "none";
+    copyResultBtn.style.display = "none";
+
+    checkBtn.disabled = false;
+    nextBtn.disabled = true;
+
+    resetSetting();
+    nextQuestion(true);
+  }
+
+  function nextQuestion(first=false){
+    if(!first && state.qIndex >= state.total){
+      endGame();
+      return;
+    }
+    state.qIndex += 1;
+    qNow.textContent = toArabicDigits(state.qIndex);
+
+    pickQuestion();
+    setFeedback("اضبط العقارب ثم اضغط “تحقق”.");
+    nextBtn.disabled = true;
+    checkBtn.disabled = false;
+  }
+
+  function checkAnswer(){
+    if(!state.target) return;
+
+    const sh = clampHour12(state.setting.hour);
+    const sm = state.setting.minute;
+    const ok = (sh === state.target.hour) && (sm === state.target.minute);
+
+    if(ok){
+      state.score += 1;
+      scoreEl.textContent = toArabicDigits(state.score);
+      setFeedback(`أحسنت! ✅ الوقت صحيح: ${formatTime(sh, sm)}.`, "ok");
+    }else{
+      setFeedback(`ليس تمامًا ❌ اخترت ${formatTime(sh, sm)} — الصحيح ${formatTime(state.target.hour, state.target.minute)}.`, "bad");
+    }
+
+    checkBtn.disabled = true;
+    nextBtn.disabled = false;
+    nextBtn.textContent = (state.qIndex >= state.total) ? "إنهاء" : "التالي";
+  }
+
+  function endGame(){
+    const name = (state.student || "طالب");
+    let msg = `انتهى التدريب يا ${name}! نتيجتك: ${toArabicDigits(state.score)} من ${toArabicDigits(state.total)}.`;
+    if(state.score > state.best){
+      state.best = state.score;
+      saveBest();
+      msg += " 🎉 هذا أفضل رقم لك!";
+      setFeedback(msg, "ok");
+    }else{
+      setFeedback(msg, "");
+    }
+    prompt.innerHTML = `🎯 انتهيت! جرّب مرة ثانية وخلّ وقتك منظمًا في رمضان.`;
+
+    checkBtn.disabled = true;
+    nextBtn.disabled = true;
+
+    certBtn.style.display = "inline-block";
+    copyResultBtn.style.display = "inline-block";
+  }
+
+  function changeDifficulty(v){
+    state.difficulty = v;
+    const allowed = DIFF[state.difficulty].minutes;
+    if(!allowed.includes(state.setting.minute)){ state.setting.minute = allowed[0]; }
+    updateClock();
+    renderPlan();
+  }
+
+  function hourInc(){ state.setting.hour = clampHour12(state.setting.hour + 1); updateClock(); }
+  function hourDec(){ state.setting.hour = clampHour12(state.setting.hour - 1); updateClock(); }
+  function minuteInc(){
+    const step = DIFF[state.difficulty].step;
+    if(step >= 60){ state.setting.minute = 0; updateClock(); return; }
+    state.setting.minute = (state.setting.minute + step) % 60;
+    updateClock();
+  }
+  function minuteDec(){
+    const step = DIFF[state.difficulty].step;
+    if(step >= 60){ state.setting.minute = 0; updateClock(); return; }
+    state.setting.minute = (state.setting.minute - step + 60) % 60;
+    updateClock();
+  }
+
+  function activateTab(name){
+    tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+    Object.keys(panels).forEach(k => panels[k].style.display = (k===name) ? "block" : "none");
+    if(name === "plan") renderPlan();
+    if(name === "game") setTimeout(buildNumbers, 50);
+  }
+  tabs.forEach(t => t.addEventListener("click", () => activateTab(t.dataset.tab)));
+
+  function loadPlan(){
+    const raw = localStorage.getItem("ramadan_clock_plan");
+    if(raw){
+      try{
+        const data = JSON.parse(raw);
+        if(Array.isArray(data) && data.length){
+          state.plan = data.map(x => ({
+            id: x.id || ("id_" + Math.random().toString(16).slice(2)),
+            label: x.label || "نشاط",
+            hour: clampHour12(Number(x.hour || 12)),
+            minute: Number(x.minute || 0),
+          }));
+          return;
+        }
+      }catch(e){}
+    }
+    state.plan = planDefaults.map(x => ({...x}));
+  }
+
+  function savePlan(){
+    localStorage.setItem("ramadan_clock_plan", JSON.stringify(state.plan));
+    setFeedback("تم حفظ الجدول ✅ يمكنك طباعته الآن.", "ok");
+  }
+
+  function renderPlan(){
+    const tbody = document.querySelector("#planTable tbody");
+    if(!tbody) return;
+    tbody.innerHTML = "";
+
+    const minutesAllowed = DIFF[state.difficulty].minutes;
+    const hourOptions = Array.from({length:12}, (_,i)=>i+1);
+
+    state.plan.forEach((row, idx) => {
+      const tr = document.createElement("tr");
+
+      const tdLabel = document.createElement("td");
+      tdLabel.innerHTML = `<b>${row.label}</b>`;
+      tr.appendChild(tdLabel);
+
+      const tdH = document.createElement("td");
+      const selH = document.createElement("select");
+      selH.className = "select";
+      hourOptions.forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = toArabicDigits(h);
+        if(h === clampHour12(row.hour)) opt.selected = true;
+        selH.appendChild(opt);
+      });
+      selH.addEventListener("change", (e) => { state.plan[idx].hour = clampHour12(Number(e.target.value)); });
+      tdH.appendChild(selH);
+      tr.appendChild(tdH);
+
+      const tdM = document.createElement("td");
+      const selM = document.createElement("select");
+      selM.className = "select";
+      minutesAllowed.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m;
+        opt.textContent = toArabicDigits(pad2(m));
+        if(m === Number(row.minute)) opt.selected = true;
+        selM.appendChild(opt);
+      });
+      if(!minutesAllowed.includes(Number(row.minute))){ state.plan[idx].minute = minutesAllowed[0]; }
+      selM.addEventListener("change", (e) => { state.plan[idx].minute = Number(e.target.value); });
+      tdM.appendChild(selM);
+      tr.appendChild(tdM);
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  // ===== Certificate =====
+  function openCertificate(){
+    const name = (state.student || "طالب");
+    const today = new Date();
+    const dateStr = `${toArabicDigits(today.getFullYear())}/${toArabicDigits(pad2(today.getMonth()+1))}/${toArabicDigits(pad2(today.getDate()))}`;
+    certName.textContent = name;
+    certScore.textContent = `${toArabicDigits(state.score)} / ${toArabicDigits(state.total)}`;
+    certDate.textContent = dateStr;
+
+    certModal.classList.add("show");
+    certModal.setAttribute("aria-hidden","false");
+  }
+  function closeCertificate(){
+    certModal.classList.remove("show");
+    certModal.setAttribute("aria-hidden","true");
+  }
+
+  async function copyResult(){
+    const name = (state.student || "طالب");
+    const text = `نتيجة ${name}: ${state.score}/${state.total} في برنامج (وقتي في رمضان — تدريب قراءة الساعة).`;
+    try{
+      await navigator.clipboard.writeText(text);
+      setFeedback("تم نسخ النتيجة ✅", "ok");
+    }catch(e){
+      // بديل إذا المتصفح منع النسخ
+      window.prompt("انسخ النتيجة:", text);
+    }
+  }
+
+  function init(){
+    loadBest();
+    loadStudent();
+    loadPlan();
+
+    setTimeout(buildNumbers, 50);
+    updateClock();
+
+    difficultySel.addEventListener("change", e => changeDifficulty(e.target.value));
+    studentName.addEventListener("input", e => { state.student = e.target.value.trim(); saveStudent(); });
+
+    startBtn.addEventListener("click", startGame);
+    resetBtn.addEventListener("click", () => { resetSetting(); setFeedback("تمت إعادة الضبط."); });
+    checkBtn.addEventListener("click", checkAnswer);
+
+    nextBtn.addEventListener("click", () => {
+      if(state.qIndex >= state.total){ endGame(); }
+      else { nextQuestion(false); }
+    });
+
+    hourUp.addEventListener("click", hourInc);
+    hourDown.addEventListener("click", hourDec);
+    minUp.addEventListener("click", minuteInc);
+    minDown.addEventListener("click", minuteDec);
+
+    el("savePlan").addEventListener("click", savePlan);
+    el("printPlan").addEventListener("click", () => window.print());
+
+    certBtn.addEventListener("click", openCertificate);
+    closeCert.addEventListener("click", closeCertificate);
+    printCert.addEventListener("click", () => window.print());
+    copyResultBtn.addEventListener("click", copyResult);
+
+    certModal.addEventListener("click", (e) => { if(e.target === certModal) closeCertificate(); });
+
+    state.difficulty = difficultySel.value;
+    changeDifficulty(state.difficulty);
+
+    window.addEventListener("resize", () => setTimeout(buildNumbers, 60));
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
